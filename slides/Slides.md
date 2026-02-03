@@ -377,7 +377,7 @@ postgres     15        19f99b135e18   2 months ago   426MB
 
 ---
 
-# Images Docker Officielles ✅
+# Images Docker Officielles
 
 <div class="columns">
 <div>
