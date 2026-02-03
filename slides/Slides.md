@@ -18,7 +18,7 @@ footer      : "JLC - 4DOP1DR"
 <div class="title"         > 4DOP1DR - Théorie   </div>
 <div class="subtitle"      > Introduction aux méthodes DevOps   </div>
 <div class="author"        > JLC - Jonathan Lechien  </div>
-<div class="date"          > Bruxelles, 2025      </div>
+<div class="date"          > Bruxelles, 2026      </div>
 <div class="organization"  > Haute École Bruxelles-Brabant : Département des Sciences Informatiques    </div>
 
 ---        
@@ -60,7 +60,7 @@ Planning détaillé disponible sur PoEsi
  
 <!-- _class: cite -->        
 
-L'**évaluation** de l'unité repose sur un contrôle continu combinant un **QCM** pour 25% de la note et la **réalisation de scénarios pratiques** pour 75% de la note. 
+L'évaluation de l'unité repose sur **la défense orale** d'un projet lors de la session de mai/juin. Le projet consiste en la conception et la mise en œuvre de scénarios simulant des situations professionnelles nécessitant **l’utilisation coordonnée de plusieurs outils** DevOps.
 
 ---
 
