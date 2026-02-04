@@ -176,7 +176,7 @@ DevOps est une **culture** et un ensemble de **pratiques** visant à améliorer 
 ### Ops
 
 5. *Terraform* 
-6. *AWS/Azure/AlwaysData* 
+6. *GCloud/Azure/AlwaysData* 
 7. *Prometheus*
  
 </div>    
@@ -218,7 +218,7 @@ Conteneurisation avec Docker
 ## Installation Docker
 
 1. Créer un fichier `docker-compose.yml`
-1. Copier le contenu du fichier de [Docker Hub](https://hub.docker.com/_/wordpressl)
+1. Copier le contenu du fichier de [Docker Hub](https://hub.docker.com/_/wordpress)
 1. Démarrer Wordpress via `docker-compose up -d`
 
 </div>
@@ -463,7 +463,7 @@ f2d1a4f3c2f3  eager_tesla  postgres:15  Up 2 minutes
 
 ---
 
-# Binding des ports
+# Binding des ports d'un conteneur
 
 - Le binding des ports permet de rediriger un port de l’hôte vers un port du conteneur.
 - Syntaxe : `-p <port_hôte>:<port_conteneur>`
@@ -727,7 +727,7 @@ image-single-stage   latest    4068a159c3d2   36 seconds ago   599MB
 
 ---
 
-# Concept 5 : Les volumes
+# Concept clé 7 : Les volumes
 
 Les volumes permettent de **stocker** les données de manière **persistante**.
 
@@ -742,7 +742,7 @@ echo "<h1>Bienvenue sur mon site</h1>" > my_website/index.html
 docker run -d --name my_nginx -p 8080:80 -v ./my_website:/usr/share/nginx/html nginx
 ```
 
-http://localhost:8080 affiche le contenu du fichier my_website/index.html. VOus devez avoir les droits d'écriture dans le volume.
+http://localhost:8080 affiche le contenu du fichier my_website/index.html. Vous devez avoir les droits d'écriture dans le volume.
 
 ---
 <!-- _class: transition2 -->  
