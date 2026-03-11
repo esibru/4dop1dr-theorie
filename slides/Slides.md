@@ -2296,7 +2296,7 @@ gcloud config set compute/zone europe-west1-b
 # Déployer une application avec le client : VM
 
 ```bash
-gcloud compute instances create flask-demo \
+gcloud compute instances create test-demo \
   --machine-type=e2-micro \
   --zone=europe-west1-b \
   --image-family=debian-12 \
@@ -2323,7 +2323,7 @@ gcloud compute firewall-rules create allow-flask \
 # Déployer une application avec le client : Installation
 
 ```bash
-ssh -i ~/.ssh/google_compute_engine jlechien@$EXTERNAL_IP
+ssh -i ~/.ssh/google_compute_engine jlechien@test-demo
 
 sudo apt-get update
 sudo apt-get install -y python3-pip
@@ -2342,14 +2342,14 @@ pip install flask
 # Déployer une application avec le client : copie via SSH
 
 ```bash
-gcloud compute scp ~/app.py flask-demo:~/flask-app --zone=europe-west1-b
+gcloud compute scp ~/app.py test-demo:~/flask-app --zone=europe-west1-b
 ```
 
 ---
 # Déployer une application avec le client : Installation
 
 ```bash
-ssh -i ~/.ssh/google_compute_engine jlechien@$EXTERNAL_IP
+ssh -i ~/.ssh/google_compute_engine jlechien@test-demo
 
 python app.py
 ```
