@@ -2097,7 +2097,7 @@ Gestion d'une infrastructure
 
 <!-- _class: cite -->    
 
-L'**Infrastructure as Code** (IaC) est une approche qui consiste à gérer et provisionner l’infrastructure informatique à l’aide de **fichiers de configuration** plutôt que par des processus manuels ou interactifs. Elle permet **d’automatiser** la gestion des serveurs, des réseaux, des bases de données et d'autres composants via du code, ce qui garantit **cohérence**, **rapidité** et **reproductibilité**.
+L'**Infrastructure as Code** (IaC) est une approche qui consiste à gérer et provisionner l’infrastructure informatique à l’aide de **fichiers de configuration** plutôt que par des processus manuels ou interactifs. Elle **automatise** la gestion des serveurs, des réseaux, des bases de données via du code, garantissant **cohérence**, **rapidité** et **reproductibilité**.
 
 --- 
 # Principes clés de l’Infrastructure as Code
@@ -2224,7 +2224,7 @@ Google Cloud Platform (**GCP**) est un ensemble de services **cloud** proposés 
 
 - Permet de consulter l’état des crédits gratuits de GCP 
 
-- 300$ pour les nouveaux utilisateurs
+- 50$ pour les nouveaux utilisateurs
 
 - Accès aux détails de facturation, gestion des coûts et optimisation de l’utilisation des ressources
 
@@ -2261,9 +2261,9 @@ Google Cloud Platform (**GCP**) est un ensemble de services **cloud** proposés 
 ---
 # Déployer une application web via l'interface
 
-- *Créer* et *configurer* un réseau *VPC*
+<!-- - *Créer* et *configurer* un réseau *VPC*
 
-- Ajouter un *sous-réseau* et définir *une plage d'adresse IP*
+- Ajouter un *sous-réseau* et définir *une plage d'adresse IP* -->
 
 - *Créer* une instance *Compute Engine* (machine virtuelle)
 
@@ -2274,7 +2274,7 @@ Google Cloud Platform (**GCP**) est un ensemble de services **cloud** proposés 
 ---
 # Déployer une application web via l'interface
 
-- *Connecter* la machine virtuelle *au sous-réseau*
+<!-- - *Connecter* la machine virtuelle *au sous-réseau* -->
 
 - *Configurer* des règles de *pare-feu* : 
   -  Permettre les connexions *SSH*
@@ -2282,59 +2282,76 @@ Google Cloud Platform (**GCP**) est un ensemble de services **cloud** proposés 
 
 - *Uploader* l'application via ssh
 ---
-# Déployer une application avec le client
+# Déployer une application avec le client : configuration
 
 ```bash
 gcloud auth login
 
 gcloud config set project $PROJECT_ID
 
-gcloud compute networks create $NETWORK_NAME \
-  --subnet-mode=custom \
-  --mtu=1460
-
-gcloud compute networks subnets create $SUBNET_NAME \
-  --network=$NETWORK_NAME \
-  --region=us-west1 \
-  --range=$SUBNET_RANGE
+gcloud config set compute/zone europe-west1-b
 ```
 
 ---
-# Déployer une application avec le client
+# Déployer une application avec le client : VM
 
 ```bash
-gcloud compute instances create $INSTANCE_NAME \
-  --machine-type=$MACHINE_TYPE \
-  --zone=us-west1-a \
+gcloud compute instances create flask-demo \
+  --machine-type=e2-micro \
+  --zone=europe-west1-b \
+  --image-family=debian-12 \
   --image-project=debian-cloud \
-  --image=$IMAGE \
-  --tags=ssh \
-  --subnet=$SUBNET_NAME \
-  --metadata=startup-script="$(cat <<EOF
-#!/bin/bash
-sudo apt-get update
-sudo apt-get install -yq build-essential python3-pip rsync
-pip install flask
-EOF
-)"
+  --tags=ssh
 ```
 
 ---
-# Déployer une application avec le client
+# Déployer une application avec le client : Firewall
 
 ```bash
-gcloud compute firewall-rules create $FIREWALL_SSH \
+gcloud compute firewall-rules create allow-ssh \
   --allow=tcp:22 \
-  --direction=INGRESS \
-  --network=$NETWORK_NAME \
-  --priority=1000 \
-  --source-ranges=0.0.0.0/0 \
-  --target-tags=ssh
-
-gcloud compute firewall-rules create $FIREWALL_FLASK \
-  --allow=tcp:5000 \
-  --network=$NETWORK_NAME \
+  --target-tags=ssh \
   --source-ranges=0.0.0.0/0
+
+gcloud compute firewall-rules create allow-flask \
+  --allow=tcp:5000 \
+  --target-tags=ssh \
+  --source-ranges=0.0.0.0/0
+```
+
+---
+# Déployer une application avec le client : Installation
+
+```bash
+ssh -i ~/.ssh/google_compute_engine jlechien@$EXTERNAL_IP
+
+sudo apt-get update
+sudo apt-get install -y python3-pip
+sudo apt install python3.11-venv
+
+mkdir ~/flask-app
+cd ~/flask-app
+
+python3 -m venv venv
+source venv/bin/activate
+
+pip install flask
+```
+
+---
+# Déployer une application avec le client : copie via SSH
+
+```bash
+gcloud compute scp ~/app.py flask-demo:~/flask-app --zone=europe-west1-b
+```
+
+---
+# Déployer une application avec le client : Installation
+
+```bash
+ssh -i ~/.ssh/google_compute_engine jlechien@$EXTERNAL_IP
+
+python app.py
 ```
 
 ---
@@ -2368,8 +2385,14 @@ gcloud compute firewall-rules create $FIREWALL_FLASK \
 |-----------------------------|-----------------------|----------------------------|------------------------------|
 | **Gestion des réseaux**     | `gcloud compute networks list`  | `az network vnet list`           | `aws ec2 describe-vpcs`          |
 | **Page de gestion des réseaux** | **VPC Networks** (gestion des réseaux VPC et sous-réseaux) | **Azure Virtual Network (VNet)** | **Amazon VPC (Virtual Private Cloud)** |
+
+---
+# Comparaison
+| **Critère**                 | **Google Cloud**      | **Microsoft Azure**        | **Amazon Web Services**      |
+|-----------------------------|-----------------------|----------------------------|------------------------------|
 | **Gestion des pare-feu**    | `gcloud compute firewall-rules list` | `az network nsg list`            | `aws ec2 describe-security-groups` |
 | **Page de gestion des pare-feu** | **Firewall Rules**            | **Network Security Groups (NSG)** | **Security Groups & NACL (Network ACLs)** |
+
 
 ---
 <!-- _class: transition2 -->  
